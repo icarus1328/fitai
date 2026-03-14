@@ -2,14 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Dumbbell, ClipboardList, Trophy, Calendar } from 'lucide-react';
+import { Home, Dumbbell, ClipboardList, Trophy, User } from 'lucide-react';
 
 const NAV_ITEMS = [
   { href: '/',            label: 'Home',       icon: Home          },
-  { href: '/exercises',   label: 'Exercises',  icon: Dumbbell      },
   { href: '/workouts',    label: 'Workouts',   icon: ClipboardList },
-  { href: '/attendance',  label: 'Attendance', icon: Calendar      },
+  { href: '/exercises',   label: 'Exercises',  icon: Dumbbell      },
   { href: '/leaderboard', label: 'Ranks',      icon: Trophy        },
+  { href: '/profile',     label: 'Profile',    icon: User          },
 ];
 
 export default function BottomNav() {

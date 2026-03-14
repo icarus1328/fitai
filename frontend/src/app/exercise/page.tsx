@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import api from '@/services/api';
 import { ArrowLeft, Dumbbell, Target, Layers, Plus, Wrench } from 'lucide-react';
 import Link from 'next/link';
+
+import { Suspense } from 'react';
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   Beginner:     'bg-emerald-900/40 text-emerald-400 border-emerald-700/40',
@@ -13,10 +15,10 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   Advanced:     'bg-red-900/40    text-red-400    border-red-700/40',
 };
 
-export default function ExerciseDetailPage() {
+function ExerciseDetailInner() {
   const router = useRouter();
-  const params = useParams();
-  const id = params?.id as string;
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
 
   const [exercise, setExercise] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -167,4 +169,16 @@ export default function ExerciseDetailPage() {
       </div>
     </div>
   );
+}
+
+export default function ExerciseDetailPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <ExerciseDetailInner />
+    </Suspense>
+  )
 }

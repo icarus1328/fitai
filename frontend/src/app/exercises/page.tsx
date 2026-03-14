@@ -210,7 +210,7 @@ export default function ExercisesPage() {
             </div>
           ) : (
             exercises.map(ex => (
-              <Link key={ex.id} href={`/exercises/${ex.id}`}>
+              <Link key={ex.id} href={`/exercise?id=${ex.id}`}>
                 <div className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-2xl p-3 hover:border-gray-600 hover:bg-gray-800/70 transition-all active:scale-[0.99] group">
                   {/* GIF thumbnail */}
                   <div className="w-16 h-16 rounded-xl overflow-hidden bg-gray-800 flex-shrink-0">

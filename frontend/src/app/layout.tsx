@@ -12,6 +12,12 @@ export const metadata: Metadata = {
   title: "FitAI — Your AI-Powered Fitness Coach",
   description: "Track workouts, monitor progress, and get intelligent AI-powered workout recommendations to crush your fitness goals.",
   keywords: ["fitness tracker", "AI coach", "workout log", "strength training", "calorie tracking"],
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "FitAI",
+  },
 };
 
 export const viewport: Viewport = {

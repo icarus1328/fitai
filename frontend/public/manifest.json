@@ -1,0 +1,25 @@
+{
+  "name": "FitAI - Your AI Fitness Coach",
+  "short_name": "FitAI",
+  "description": "Complete intelligent fitness platform tracking workouts, providing AI suggestions, and tracking PRs.",
+  "theme_color": "#030712",
+  "background_color": "#030712",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "id": "/",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
