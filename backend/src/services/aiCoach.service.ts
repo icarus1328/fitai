@@ -5,7 +5,7 @@ import db from '../config/db';
 interface SetData {
   weight: number;
   reps: number;
-  exercise: { name: string; primaryMuscle: string };
+  exercise: { name: string; primaryMuscle?: { name: string } };
   workout: { date: Date };
 }
 
@@ -100,7 +100,7 @@ export const calcWeeklyVolume = (sets: SetData[]): WeeklyVolume => {
   const recentSets = sets.filter(s => new Date(s.workout.date) >= oneWeekAgo);
 
   return recentSets.reduce((acc, s) => {
-    const muscle = s.exercise.primaryMuscle;
+    const muscle = s.exercise.primaryMuscle?.name || 'Mixed';
     acc[muscle] = (acc[muscle] || 0) + s.weight * s.reps;
     return acc;
   }, {} as WeeklyVolume);
@@ -115,7 +115,7 @@ export const countWeeklySetsPerMuscle = (sets: SetData[]): Record<string, number
   const recentSets = sets.filter(s => new Date(s.workout.date) >= oneWeekAgo);
 
   return recentSets.reduce((acc, s) => {
-    const muscle = s.exercise.primaryMuscle;
+    const muscle = s.exercise.primaryMuscle?.name || 'Mixed';
     acc[muscle] = (acc[muscle] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
@@ -131,7 +131,7 @@ export const detectRecoveryWarnings = (sets: SetData[]): string[] => {
   const recentMuscles = new Set<string>();
   sets.forEach(s => {
     if (new Date(s.workout.date) >= twoDaysAgo) {
-      recentMuscles.add(s.exercise.primaryMuscle);
+      recentMuscles.add(s.exercise.primaryMuscle?.name || 'Mixed');
     }
   });
 
@@ -152,7 +152,7 @@ export const generateRecommendations = async (userId: string) => {
   const allSets = await db.workoutSet.findMany({
     where: { workout: { userId } },
     include: {
-      exercise: true,
+      exercise: { include: { primaryMuscle: true } },
       workout: true,
     },
     orderBy: { workout: { date: 'desc' } },
