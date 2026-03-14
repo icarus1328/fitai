@@ -278,7 +278,7 @@ export default function NewWorkoutInner() {
                 >
                   <div>
                     <p className="font-bold text-gray-200 group-hover:text-white transition-colors">{ex.name}</p>
-                    <span className="text-xs text-blue-400 font-medium">{ex.primaryMuscle}</span>
+                    <span className="text-xs text-blue-400 font-medium">{ex.primaryMuscle?.name || 'Mixed'}</span>
                   </div>
                   <Plus className="text-gray-600 group-hover:text-blue-400 w-5 h-5 transition-colors" />
                 </button>
