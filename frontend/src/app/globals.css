@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+:root {
+  --font-inter: 'Inter', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  background-color: #030712;
+  color: #f9fafb;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide scrollbars for filter chip rows */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Mobile safe-area padding for bottom nav */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Smooth card hover lifts */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Number input – hide arrows */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* Animated gradient glow for AI cards */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 0.8; }
+}
+.glow-animate {
+  animation: glow-pulse 3s ease-in-out infinite;
+}

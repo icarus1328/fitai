@@ -1,0 +1,161 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(uuid())
+  email             String   @unique
+  name              String?
+  passwordHash      String
+  currentWeight     Float?
+  targetWeight      Float?
+  height            Float?
+  age               Int?
+  gender            String?
+  activityLevel     String?
+  avgDailyCalories  Int?
+  createdAt         DateTime @default(now())
+
+  // Ranking fields
+  fitnessScore      Float    @default(0)
+  strengthScore     Float    @default(0)
+  volumeScore       Float    @default(0)
+  consistencyScore  Float    @default(0)
+  rankTier          String   @default("Beginner")
+
+  weakMuscles       UserWeakMuscle[]
+  workouts          Workout[]
+  weeklyReports     WeeklyReport[]
+  attendanceLogs    AttendanceLog[]
+  personalRecords   PersonalRecord[]
+  badges            UserBadge[]
+}
+
+model UserWeakMuscle {
+  userId      String
+  muscleGroup String
+  user        User   @relation(fields: [userId], references: [id])
+
+  @@id([userId, muscleGroup])
+}
+
+model BodyRegion {
+  id           String        @id @default(uuid())
+  name         String        @unique
+  muscleGroups MuscleGroup[]
+}
+
+model MuscleGroup {
+  id                 String       @id @default(uuid())
+  name               String       @unique
+  bodyRegionId       String
+  bodyRegion         BodyRegion   @relation(fields: [bodyRegionId], references: [id])
+  primaryExercises   Exercise[]   @relation("PrimaryMuscle")
+  secondaryExercises ExerciseSecondaryMuscle[]
+
+  @@index([bodyRegionId])
+}
+
+model Exercise {
+  id                String   @id @default(uuid())
+  externalId        String?  @unique   // ExerciseDB id, for dedup on re-seed
+  name              String   @unique
+  
+  primaryMuscleId   String?
+  primaryMuscle     MuscleGroup? @relation("PrimaryMuscle", fields: [primaryMuscleId], references: [id])
+  
+  equipment         String?
+  difficulty        String?
+  instructions      String?
+  mediaUrl          String?  // gif / image URL from ExerciseDB
+  
+  secondaryMuscles  ExerciseSecondaryMuscle[]
+  workoutSets       WorkoutSet[]
+  personalRecords   PersonalRecord[]
+
+  @@index([primaryMuscleId])
+}
+
+model ExerciseSecondaryMuscle {
+  exerciseId     String
+  muscleGroupId  String
+  exercise       Exercise    @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  muscleGroup    MuscleGroup @relation(fields: [muscleGroupId], references: [id], onDelete: Cascade)
+
+  @@id([exerciseId, muscleGroupId])
+  @@index([muscleGroupId])
+}
+
+model Workout {
+  id        String       @id @default(uuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
+  date      DateTime     @default(now())
+  notes     String?
+
+  sets      WorkoutSet[]
+}
+
+model WorkoutSet {
+  id          String   @id @default(uuid())
+  workoutId   String
+  workout     Workout  @relation(fields: [workoutId], references: [id])
+  exerciseId  String
+  exercise    Exercise @relation(fields: [exerciseId], references: [id])
+  setNumber   Int
+  reps        Int
+  weight      Float
+  isWarmup    Boolean  @default(false)
+}
+
+model AttendanceLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  date      DateTime
+  source    String   @default("manual") // 'manual' | 'workout'
+
+  @@unique([userId, date])
+}
+
+model WeeklyReport {
+  id               String   @id @default(uuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
+  weekStartDate    DateTime
+  avgCalories      Int?
+  avgWeight        Float?
+  totalVolume      Float?
+  aiRecommendation String?
+}
+
+model PersonalRecord {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  exerciseId String
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  
+  maxWeight  Float    @default(0)
+  maxReps    Int      @default(0)
+  maxVolume  Float    @default(0)
+  
+  updatedAt  DateTime @updatedAt
+  
+  @@unique([userId, exerciseId])
+}
+
+model UserBadge {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  badgeName String
+  earnedAt  DateTime @default(now())
+
+  @@unique([userId, badgeName])
+}
