@@ -177,6 +177,25 @@ export default function ProfilePage() {
           </div>
         </div>
 
+        {/* ── Consistency & Logs ── */}
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+          <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Consistency</h2>
+          <Link href="/attendance">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-gray-800/50 hover:bg-gray-800 transition-colors border border-gray-700/50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-900/30 flex items-center justify-center">
+                  <Flame className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div>
+                  <p className="font-bold text-gray-200">Attendance Log</p>
+                  <p className="text-xs text-gray-400">Track your daily gym visits</p>
+                </div>
+              </div>
+              <span className="text-gray-500 font-bold">→</span>
+            </div>
+          </Link>
+        </div>
+
         {/* ── Logout ── */}
         <button
           onClick={logout}
