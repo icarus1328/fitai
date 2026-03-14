@@ -45,7 +45,7 @@ export default function RegisterPage() {
       }
     } catch (err: any) {
       console.error("Register Error:", err, "URL:", api.defaults.baseURL);
-      const exactErr = err.response?.data?.error || err.message || 'Unknown network error';
+      const exactErr = err.response?.data?.details || err.response?.data?.error || err.message || 'Unknown network error';
       setError(`Failed to connect to ${api.defaults.baseURL} — Error: ${exactErr}`);
     } finally {
       setLoading(false);
