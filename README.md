@@ -1,18 +1,20 @@
 # AI Fitness Tracker Platform
 
-A comprehensive, intelligent fitness platform featuring advanced workout tracking, hierarchical exercise libraries, AI coaching, personal records (PRs), and real-time analytics dashboards. Built for massive scalability, ready to be converted to Android via Capacitor.
+A comprehensive, intelligent fitness platform featuring advanced workout tracking, hierarchical exercise libraries, AI coaching, personal records (PRs), and real-time analytics dashboards. Built for massive scalability, the application functions as a **Progressive Web App (PWA)** and is natively compiled for Android (`.aab`) via **Capacitor**.
 
 ## 🏗️ Architecture Stack
 
 The platform is split into a robust modular monolith architecture:
 
-### Frontend
-- **Framework:** Next.js 14+ (App Router)
+### Frontend (Mobile-Optimized PWA)
+- **Framework:** Next.js 14+ (App Router) exported as a Static App
 - **Language:** TypeScript
 - **Styling:** TailwindCSS
 - **State Management:** React Hooks & js-cookie (for Auth Tokens)
 - **Data Visualization:** Recharts (Area, Bar, and Pie Charts)
 - **Icons:** Lucide React
+- **Mobile Engine:** Capacitor (`@capacitor/android`)
+- **PWA Integration:** `@ducanh2912/next-pwa` (Service Worker Caching & Offline manifest)
 
 ### Backend
 - **Core:** Node.js, Express
@@ -80,6 +82,11 @@ Instead of flat string searches, the UI restricts users structurally:
     - Pulls **Muscle Group Distribution** by scanning all `WorkoutSet` entries across `primaryMuscle` IDs mapping to an aggregate counter.
 4. Next.js natively renders the data stream into beautiful gradient `Recharts` SVG components.
 
+### 4. PWA & Capacitor Native Build Flow
+1. **PWA Generation:** Upon running `npm run build` in the frontend, `next-pwa` extracts static web-assets into service workers configured for offline caching and generates a mobile installable `manifest.json`.
+2. **Capacitor Extraction:** Next.js uses standard static export `output: 'export'`. Capacitor copies this output from `/out` directly into the `android/app/src/main/assets/public/` Java container.
+3. This creates a fully functioning native Android App (`.aab`/`.apk`) completely mirroring the web experience.
+
 ---
 
 ## 🚀 Environment Setup & Deployment
@@ -97,14 +104,20 @@ Instead of flat string searches, the UI restricts users structurally:
 4. Run `npm run seed:exercises` to download and structure the 1,303 exercises locally.
 5. Run `npm run dev` to start server (http://localhost:5001).
 
-### Frontend
+### Frontend (Web / PWA)
 1. `cd frontend`
-2. Provide configurations if utilizing specific NEXT_PUBLIC env vars.
-3. Run `npm run dev` to start UI (http://localhost:3000).
+2. Provide configurations if utilizing specific `NEXT_PUBLIC_` env vars.
+3. Run `npm run dev` to start UI (http://localhost:3000). To test the PWA, visit the local network IP (or Vercel HTTPS Deployment) and accept the "Install App" prompt.
+
+### Frontend (Android Studio)
+1. Run `npm run build` inside `frontend/` to generate the strict static `/out` directory.
+2. Run `npx cap sync` to synchronize Next.js HTML/JS with the Java container.
+3. Run `npx cap open android` (or organically open `frontend/android` in Android Studio).
+4. Run *Build -> Generate Signed App Bundle* inside Android Studio!
 
 ---
 
 ## 📅 Roadmap (Next Phases)
 - **Auto Workout Program Generator:** Algorithmic routines factoring in target goals, weak groups, and frequency.
 - **Strength Progress Prediction:** Extrapolating forward data to warn users of plateaus based on algorithmic trajectory.
-- **PWA/Capacitor Wrap:** Native build extraction mapping directly to `.aab` for Google Play deployment.
+- **Offline Push Synchronization:** Creating offline SQL queues mapped via Capacitor storage protocols intercepting HTTP logic when network fails.
