@@ -115,6 +115,15 @@ Instead of flat string searches, the UI restricts users structurally:
 3. Run `npx cap open android` (or organically open `frontend/android` in Android Studio).
 4. Run *Build -> Generate Signed App Bundle* inside Android Studio!
 
+### ⚠️ Troubleshooting Local Mobile Testing (PWA)
+If you are testing the PWA on your phone over your local network (e.g., `http://192.168.1.x:3000`):
+- **Failed to Register / CORS Errors**: Do not use `localtunnel` or `ngrok` for the backend, as their interceptor warning pages block the JSON payload and crash the app. The app automatically resolves your local IP address natively.
+- **No "Install App" Popup**: Google Chrome blocks the PWA install prompt on HTTP connections. To bypass this for testing:
+  1. On your Android device, go to `chrome://flags/#unsafely-treat-insecure-origin-as-secure`
+  2. Add your local IP address (e.g., `http://192.168.1.130:3000`)
+  3. Set the dropdown to **Enabled** and relaunch Chrome. The popup will now work!
+- **Production Solution**: For the easiest experience, deploy the frontend to **Vercel** and the backend to **Render**. This guarantees secure `https://` encryption and instant PWA capability globally.
+
 ---
 
 ## 📅 Roadmap (Next Phases)
