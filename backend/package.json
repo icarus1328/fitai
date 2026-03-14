@@ -7,6 +7,7 @@
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
+    "postinstall": "prisma generate",
     "seed:exercises": "ts-node prisma/seedExercises.ts"
   },
   "keywords": [],
